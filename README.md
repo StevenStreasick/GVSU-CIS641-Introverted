@@ -1,4 +1,4 @@
-# Team Name
+# Introverted
 
 Project description (~1 paragraph)
 
