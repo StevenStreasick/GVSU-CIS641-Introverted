@@ -7,8 +7,8 @@ This project will consist of creating and testing one method of implementing a d
 * [Steven Streasick](https://github.com/StevenStreasick/GVSU-CIS641-Introverted/tree/main) https://github.com/StevenStreasick
 
 ## Prerequisites
-GoDot 4
+GoDot 4 and
 GitHub
 
 ## Run Instructions
-Download the ZIP file from the public repo. Then, import a new project into GoDot 4 and choose the newly downloaded ZIP file. Then, press the Play current Scene. 
+Download the ZIP file from the public repo. Then import a new project into GoDot 4 and choose the newly downloaded ZIP file. Then press the Play current Scene. 
