@@ -1,0 +1,26 @@
+# CIS641 Meeting Instructions
+
+Hold a team meeting at least once a week in some format.  Copy the following template below into a new document, naming it GVSU-CIS641-TEAMNAME-YYYY-MM-DD (replacing TEAMNAME with your team's name and the appropriate date fields).  Commit it to this folder, ensuring it is up by each Tuesday by 11:59pm.  There should be a unique document for each meeting held.
+
+## Meeting minutes template
+
+Team name: Team Introverted
+
+Members present:
+Steven Streasick
+
+Date:
+10/07/2024
+
+Time:
+10:30-11:00
+
+Discussion points: 
+
+* Implementing a 'following' mechanic where fish will start to follow you if you get within a certain distance
+* Whether this mechanic will implement sufficient slowdown to the game.
+* The formula to implement the following mechanic, while producing a smooth result correlating with framerate.
+
+Goals for next week (include responsibilities)
+
+* Implement the following mechanic using a formula. Resposibility: Steven 
