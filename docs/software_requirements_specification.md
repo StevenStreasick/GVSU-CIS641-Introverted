@@ -1,5 +1,17 @@
-1.	This is an ordered list 
-2.	This will actually show number 2 
-    1.	This is 2.1 (but will show just as 1 because Markdown doesn’t handle sub-lists very well, unless if you add raw HTML...) 
-    2.	and 2.2 
-    3.	and 2.3 and so on 
+# Overview 
+ 
+<Describe the purpose of this document in 1 paragraph of less … hint: it is your SRS> 
+ 
+# Functional Requirements 
+ 
+1. <Name of Feature 1> 
+   1.	<Functional Requirement 1> 
+   2.	<Functional Requirement 2> 
+   3.	<And so on> 
+ 
+# Non-Functional Requirements 
+ 
+1. <Name of Feature 1> 
+   1.	<Non-Functional Requirement 1> 
+   2.	<Non-Functional Requirement 2> 
+   3.	<And so on> 
