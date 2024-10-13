@@ -12,3 +12,8 @@ GitHub
 
 ## Run Instructions
 Download the ZIP file from the public repo. Then import a new project into GoDot 4 and choose the newly downloaded ZIP file. Then press the Play current Scene. 
+
+## Relevant Artifacts and Documents
+
+* [Software Requirements Specification](https://github.com/StevenStreasick/GVSU-CIS641-Introverted/blob/main/docs/software_requirements_specification.md)
+* [Proposal](https://github.com/StevenStreasick/GVSU-CIS641-Introverted/blob/main/docs/proposal-template.md)
