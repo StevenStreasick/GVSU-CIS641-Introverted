@@ -22,18 +22,20 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	apply_input(delta)
-	apply_friction()
+	apply_friction(delta)
 	clamp_velocity()
 	update_position(delta)
 	check_bounds()
 
 func apply_input(delta: float) -> void:
 	var input = Input.get_vector("Left", "Right", "Up", "Down")
+	#print(input)
 	velocity += input * delta * acceleration
 
-func apply_friction() -> void:
+
+func apply_friction(delta : float) -> void:
 	if velocity.length() > 0:
-		velocity *= .98
+		velocity -= .6 * delta * velocity
 
 func clamp_velocity() -> void:
 	if velocity.length() > MAXVELOCITY:
@@ -41,6 +43,7 @@ func clamp_velocity() -> void:
 
 func update_position(delta: float) -> void:
 	position += velocity * delta
+	#print(position, velocity, delta)
 
 func check_bounds() -> void:
 	position.x = clamp(position.x, 0, screensize.x)
@@ -65,7 +68,7 @@ func _on_ate_enemy(area: Area2D) -> void:
 	#var growth = area.scale / scale * growthRate
 	var growth = scale.normalized() * pow((area.scale / scale).length_squared(), decayRate) * growthRate
 
-	print(str("Growth: ", growth))
+	#print(str("Growth: ", growth))
 	scale += growth
 	
 	area.hide()
