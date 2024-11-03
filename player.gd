@@ -11,8 +11,14 @@ var decayRate = 3
 signal died
 signal ateEnemy
 
+@onready var main = get_parent()
+@onready var camera = main.get_node("Camera2D")
+
+@onready var viewportSize = camera.get_viewport_rect().size
+@onready var offset = camera.offset
+
 func start() -> void:
-	position = screensize / 2
+	position = Vector2.ZERO #screensize / 2
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -45,13 +51,28 @@ func update_position(delta: float) -> void:
 	position += velocity * delta
 	#print(position, velocity, delta)
 
-func check_bounds() -> void:
-	position.x = clamp(position.x, 0, screensize.x)
-	position.y = clamp(position.y, 0, screensize.y)
+func get_lower_bounds() -> Vector2:
+	var screensize = viewportSize / camera.zoom
+
+	return offset - (screensize / 2)
 	
-	if position.x == 0 or position.x == screensize.x:
+
+
+func get_upper_bounds() -> Vector2:
+	var screensize = viewportSize / camera.zoom
+
+	return (screensize / 2) + offset
+
+func check_bounds() -> void:
+	var lowerbound: Vector2 = get_lower_bounds()
+	var upperbound: Vector2 = get_upper_bounds()
+	
+	position.x = clamp(position.x, lowerbound.x, upperbound.x)
+	position.y = clamp(position.y, lowerbound.y, upperbound.y)
+	
+	if position.x <= lowerbound.x or position.x >= upperbound.x:
 		velocity.x = 0
-	if position.y == 0 or position.y == screensize.y:
+	if position.y <= lowerbound.y or position.y >= upperbound.y:
 		velocity.y = 0
 	
 

@@ -70,5 +70,5 @@ func _process(delta) -> void:
 		_:
 			zoom = minZoom
 	
-	#camera.zoom = Vector2.ONE * zoom
+	camera.zoom = Vector2.ONE * zoom
 	

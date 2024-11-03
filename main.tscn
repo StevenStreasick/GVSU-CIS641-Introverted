@@ -40,7 +40,6 @@ script = ExtResource("5_hl4ms")
 script = ExtResource("6_ub8a8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(575, 325)
 
 [connection signal="ateEnemy" from="Player" to="." method="_on_player_ate_enemy"]
 [connection signal="died" from="Player" to="." method="endGame"]
