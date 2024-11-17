@@ -14,13 +14,14 @@ var TURNSPEED = 15 #degrees/sec
 @onready var player = main.get_node("Player")
 @onready var enemyController = main.get_node("EnemyController")
 @onready var camera: Camera2D = main.get_node("Camera2D")
+@onready var viewportSize = camera.get_viewport_rect().size
 @onready var velocityRange: Vector2 = enemyController.getEnemyVelocity()
 
 @onready var velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
 @onready var velocityLength = velocity.length()
 
 func start() -> void:
-	var viewportSize = camera.get_viewport_rect().size
+	
 	var screensize = viewportSize / camera.zoom
 
 	var x = -sideSign * screensize.x / 2
@@ -77,6 +78,16 @@ func _process(delta: float) -> void:
 
 	position += delta * velocity
 	
-	#TODO: Cull the enemy... 
-	#print(position)
-	#pass
+	
+	var screensize = viewportSize / camera.zoom
+	var border = screensize / 2
+	#TODO: Test the enemy culling to ensure that entities are properly being destroyed
+	# 		Run with only a single enemy, and print to ensure that the if statements are properly ran
+	#TODO: Handle enemy size. 
+	if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
+		self.queue_free()
+		#Destroy the entity
+	if(sign(position.y - border.y) == sign(velocity.y) && sign(position.y + border.y) == sign(velocity.y)):
+		self.queue_free
+		#Destroy the entity
+	

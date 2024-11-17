@@ -49,7 +49,7 @@ func calcInterpolatedZoom(targetZoom : float, delta):
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Engine.max_fps = 0
-	print(main.get_viewport_rect().size)
+	#print(main.get_viewport_rect().size)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -72,3 +72,8 @@ func _process(delta) -> void:
 	
 	camera.zoom = Vector2.ONE * zoom
 	
+func getHappiness() -> float:
+	return happiness
+
+func getZoom() -> float:
+	return zoom
