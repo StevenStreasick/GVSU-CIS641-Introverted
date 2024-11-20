@@ -84,10 +84,14 @@ func _process(delta: float) -> void:
 	#TODO: Test the enemy culling to ensure that entities are properly being destroyed
 	# 		Run with only a single enemy, and print to ensure that the if statements are properly ran
 	#TODO: Handle enemy size. 
-	if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
-		self.queue_free()
+	if(position.x < -border.x && sign(velocity.x) == -1):
+		queue_free()
+	if(position.x > border.x && sign(velocity.x) == 1):
+		queue_free()
+	#if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
+		#queue_free()
 		#Destroy the entity
 	if(sign(position.y - border.y) == sign(velocity.y) && sign(position.y + border.y) == sign(velocity.y)):
-		self.queue_free
+		queue_free()
 		#Destroy the entity
 	

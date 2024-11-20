@@ -4,12 +4,12 @@ extends Node
 #@onready var player = get_node("Player")
 #@onready var vel = player.velocity
 var framerate
-var idealFramerate = 160.0
-var minimumFramerate = 30.0
+var idealFramerate = 1500
+var minimumFramerate = 750
 
-var minimumDynamicZoomFramerate = 60
-var maximumDynamicZoomFramerate = 180
-var minimumSmoothZoomFramerate = 24
+var minimumDynamicZoomFramerate = 1000
+var maximumDynamicZoomFramerate = 1400
+var minimumSmoothZoomFramerate = 850
 
 var minZoom = 1
 var zoom = 1

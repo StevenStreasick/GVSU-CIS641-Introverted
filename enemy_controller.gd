@@ -38,13 +38,13 @@ func updateVal(varInfoContainer: varInfo):
 	if(smoothing): 
 		#This seems to be a concave down exponential growth graph. I want a linear graph.
 		#Additionally independent of framerate. Is this a good thing?
-		varToUpdate = clamp((1.0 - SIGMA) * varToUpdate + SIGMA * happiness * offset, 
+		varToUpdate = clamp((1.0 - SIGMA) * varToUpdate + SIGMA * pow(happiness, 3) * offset, 
 						minVal, 
 						maxVal)
 		varInfoContainer.val = varToUpdate
 		return varToUpdate
 
-	varToUpdate = clamp(happiness * offset, minVal, maxVal)
+	varToUpdate = clamp(pow(happiness, 3) * offset, minVal, maxVal)
 	varInfoContainer.val = varToUpdate
 	return varToUpdate
 	

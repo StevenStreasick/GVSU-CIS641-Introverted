@@ -2,7 +2,7 @@ extends Area2D
 
 @onready var screensize = get_viewport_rect().size
 
-var MAXVELOCITY = 150
+var MAXVELOCITY = 250
 @export var velocity = Vector2.ZERO
 var acceleration = 150
 

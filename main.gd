@@ -82,23 +82,22 @@ func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize,
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	print(filePath)
 	var spawnrate = enemy_controller.getNumEnemies()
 	if !isGameActive:
 		return
-		
-	if (time < 60):
-		#if (time > 30):
-		var framerate = Engine.get_frames_per_second()
-		var happiness = frame_rate_controller.getHappiness()
-		var zoom = frame_rate_controller.getZoom()
-		
-		var numEnemies = enemy_controller.getNumEnemies()
-		var enemySize = enemy_controller.getEnemySize()
-		var enemyVelocity = enemy_controller.getEnemyVelocity()
-		var enemySight = enemy_controller.getEnemySight()
-		
-		writeToFile(time, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight)
+
+	if (time < 45):
+		if (time > 15):
+			var framerate = Engine.get_frames_per_second()
+			var happiness = frame_rate_controller.getHappiness()
+			var zoom = frame_rate_controller.getZoom()
+			
+			var numEnemies = enemy_controller.getNumEnemies()
+			var enemySize = enemy_controller.getEnemySize()
+			var enemyVelocity = enemy_controller.getEnemyVelocity()
+			var enemySight = enemy_controller.getEnemySight()
+			
+			writeToFile(time, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight)
 		time += delta
 	else:
 		print("Times up")	
