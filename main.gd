@@ -53,31 +53,11 @@ func _ready() -> void:
 	$CanvasLayer/UI.hide()
 
 func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
-	file.store_string("%2.3f" % currentTime)
-	file.store_string("   ")
+	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
+	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str("%2.3f" % numEnemies) \
+	 + "," + str(enemySize) + "," + str(enemyVelocity)  + "," + str("%2.3f" % enemySight) + "\n"
 	
-	file.store_string("%2.3f" % framerate)
-	file.store_string("   ")
-	
-	file.store_string("%2.3f" % happiness)
-	file.store_string("   ")
-	
-	file.store_string("%2.3f" % zoom)
-	file.store_string("   ")
-	
-	file.store_string("%2.3f" % numEnemies)
-	file.store_string("   ")
-	
-	file.store_var(str(enemySize))
-	file.store_string("   ")
-	
-	file.store_var(str(enemyVelocity))
-	file.store_string("   ")
-	
-	file.store_string("%2.3f" % enemySight)	
-	file.store_string("\n")
-	
-
+	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
