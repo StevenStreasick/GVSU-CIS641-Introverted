@@ -114,7 +114,6 @@ This section associates each of the Artifact Names found within all of the artif
 | Player Basic Operations | Consume Entity | FR11 |
 | Player Basic Operations | Move | FR16 FR20 NFR18 NFR19 |
 | Player Basic Operations | Start Game | FR15 FR18 |
-
 | System Level Interactions | Spawn Enemy Fish | FR1 |
 | System Level Interactions | Update Score | FR11 FR12 |
 | System Level Interactions | Collision Detection | FR19 |
