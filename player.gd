@@ -1,12 +1,11 @@
-extends Area2D
+extends CharacterBody2D
 
 @onready var screensize = get_viewport_rect().size
 
 var MAXVELOCITY = 250
-@export var velocity = Vector2.ZERO
 var acceleration = 150
 
-var growthRate = .012
+var growthRate = 0.012
 var decayRate = 3
 signal died
 signal ateEnemy
@@ -17,50 +16,59 @@ signal ateEnemy
 @onready var viewportSize = camera.get_viewport_rect().size
 @onready var offset = camera.offset
 
+func init() -> String:
+	return "Hello"
+
 func start() -> void:
-	position = Vector2.ZERO #screensize / 2
+	position = Vector2.ZERO
+	velocity = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
-
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	apply_input(delta)
 	apply_friction(delta)
 	clamp_velocity()
-	update_position(delta)
+	move_player(delta)
 	check_bounds()
 
 func apply_input(delta: float) -> void:
 	var input = Input.get_vector("Left", "Right", "Up", "Down")
-	#print(input)
 	velocity += input * delta * acceleration
 
-
-func apply_friction(delta : float) -> void:
+func apply_friction(delta: float) -> void:
 	if velocity.length() > 0:
-		velocity -= .6 * delta * velocity
+		velocity -= 0.6 * delta * velocity
 
 func clamp_velocity() -> void:
 	if velocity.length() > MAXVELOCITY:
 		velocity = velocity.normalized() * MAXVELOCITY
 
-func update_position(delta: float) -> void:
-	position += velocity * delta
-	#print(position, velocity, delta)
+func move_player(delta: float) -> void:
+	var collision = move_and_collide(velocity * delta)
+	
+	if collision:
+		var collider = collision.get_collider()
+		#print("Collision")
+		if !collider:
+			return
+		if !collider.is_in_group("Enemies"):
+			return
+		
+		if collider.scale > scale:
+			died.emit()
+		else:
+			ateEnemy.emit(collider)
 
 func get_lower_bounds() -> Vector2:
 	var screensize = viewportSize / camera.zoom
-
 	return offset - (screensize / 2)
-	
-
 
 func get_upper_bounds() -> Vector2:
 	var screensize = viewportSize / camera.zoom
-
 	return (screensize / 2) + offset
 
 func check_bounds() -> void:
@@ -74,24 +82,11 @@ func check_bounds() -> void:
 		velocity.x = 0
 	if position.y <= lowerbound.y or position.y >= upperbound.y:
 		velocity.y = 0
+
+#func _on_area_entered(area: Area2D) -> void:
 	
 
-
-func _on_area_entered(area: Area2D) -> void:
-	if area.is_in_group("Enemies"):
-		if area.scale > scale:
-			died.emit()
-		else:
-			ateEnemy.emit(area)
-
-
-func _on_ate_enemy(area: Area2D) -> void:
-	#var growth = area.scale / scale * growthRate
+func _on_ate_enemy(area: PhysicsBody2D) -> void:
 	var growth = scale.normalized() * pow((area.scale / scale).length_squared(), decayRate) * growthRate
-
-	#print(str("Growth: ", growth))
 	scale += growth
-	
-	area.hide()
-
-	
+	area.queue_free()

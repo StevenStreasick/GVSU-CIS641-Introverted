@@ -1,23 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwp3wjrhsqk40"]
+[gd_scene load_steps=4 format=3 uid="uid://droddjnofk4dd"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_vipvg"]
-[ext_resource type="Texture2D" uid="uid://d3cwgaxxocqn4" path="res://white_circle_512x512.png" id="2_fwnxx"]
+[ext_resource type="Texture2D" uid="uid://d3cwgaxxocqn4" path="res://white_circle_512x512.png" id="1_eeejn"]
+[ext_resource type="Script" path="res://player.gd" id="1_wcujs"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_v3iib"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_5pxp5"]
 radius = 142.004
 
-[node name="Player" type="Area2D"]
-scale = Vector2(1.1, 1.1)
-script = ExtResource("1_vipvg")
+[node name="CharacterBody2D" type="CharacterBody2D"]
+disable_mode = 2
+collision_mask = 2
+safe_margin = 0.001
+script = ExtResource("1_wcujs")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(0.31749, 0.361061, 1, 1)
-texture = ExtResource("2_fwnxx")
+texture = ExtResource("1_eeejn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 top_level = true
-shape = SubResource("CircleShape2D_v3iib")
+shape = SubResource("CircleShape2D_5pxp5")
 
-[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="ateEnemy" from="." to="." method="_on_ate_enemy"]
-[connection signal="died" from="." to="." method="endGame"]

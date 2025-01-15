@@ -1,6 +1,7 @@
 extends Node2D
 
 var enemy = preload("res://enemy.tscn")
+var barrier = preload("res://Barrier.tscn")
 
 @onready var frame_rate_controller = get_node("FrameRateController")
 @onready var enemy_controller = get_node("EnemyController")
@@ -26,6 +27,7 @@ func startGame() -> void:
 	score = 0
 	
 	$Player.show()
+	print($Player.init())
 	$Player.start()
 	start_button.hide()
 	game_over.hide()
@@ -51,6 +53,9 @@ func _ready() -> void:
 	start_button.show()
 	game_over.hide()
 	$CanvasLayer/UI.hide()
+	var b = barrier.instantiate()
+	b.position = Vector2(250, 250)
+	add_child(b)
 
 func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
@@ -86,11 +91,11 @@ func _process(delta: float) -> void:
 		#print("Spawning an Enemy")
 		var e = enemy.instantiate()
 		e.scale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
+		e.position = Vector2(-10000, -10000)
 		add_child(e)
-		#print("Created new enemy")
 
 
-func _on_player_ate_enemy(area : Area2D) -> void:
+func _on_player_ate_enemy(area : PhysicsBody2D) -> void:
 	score += area.scale.length() * DEFAULTSPRITESIZE 
 	$CanvasLayer/UI.updateScore(score)
 	

@@ -1,4 +1,4 @@
-extends Area2D
+extends RigidBody2D
 
 var rng = RandomNumberGenerator.new()
 var rightSide = rng.randi_range(0, 1)
@@ -17,24 +17,24 @@ var TURNSPEED = 15 #degrees/sec
 @onready var viewportSize = camera.get_viewport_rect().size
 @onready var velocityRange: Vector2 = enemyController.getEnemyVelocity()
 
-@onready var velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
-@onready var velocityLength = velocity.length()
+
 
 func start() -> void:
-	
+	#position = Vector2(0, 0)
 	var screensize = viewportSize / camera.zoom
 
 	var x = -sideSign * screensize.x / 2
 	var yHalved = screensize.y / 2
 	var y = rng.randf_range(-yHalved, yHalved) 
 	position = Vector2(x, y)
-
+	linear_velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
+	
 func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vector2:
 	# Calculate direction vector to the player
 	var dx = playerPos.x - position.x
 	var dy = playerPos.y - position.y
-	
-	var enemyAngle = velocity.angle()
+
+	var enemyAngle = linear_velocity.angle()
 	
 	# Calculate the angle to the player
 	var targetAngle = atan2(dy, dx) * (180 / PI)  # Convert to degrees
@@ -53,14 +53,13 @@ func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vect
 
 	# Calculate the velocity components based on the adjusted angle
 	var rads = newAngle * (PI / 180.0)
-	var velocityX = cos(rads) * velocity.x
-	var velocityY = sin(rads) * velocity.y
+	var velocityX = cos(rads) * linear_velocity.x
+	var velocityY = sin(rads) * linear_velocity.y
 
 	return Vector2(velocityX, velocityY)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	start()
 
 
@@ -76,7 +75,7 @@ func _process(delta: float) -> void:
 		#velocity = get_velocity_for_targeting_player(delta, playerPos) 
 		#print(velocity.normalized().y)
 
-	position += delta * velocity
+	#position += delta * velocity
 	
 	
 	var screensize = viewportSize / camera.zoom
@@ -84,14 +83,14 @@ func _process(delta: float) -> void:
 	#TODO: Test the enemy culling to ensure that entities are properly being destroyed
 	# 		Run with only a single enemy, and print to ensure that the if statements are properly ran
 	#TODO: Handle enemy size. 
-	if(position.x < -border.x && sign(velocity.x) == -1):
+	if(position.x < -border.x && sign(linear_velocity.x) == -1):
 		queue_free()
-	if(position.x > border.x && sign(velocity.x) == 1):
+	if(position.x > border.x && sign(linear_velocity.x) == 1):
 		queue_free()
 	#if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
 		#queue_free()
 		#Destroy the entity
-	if(sign(position.y - border.y) == sign(velocity.y) && sign(position.y + border.y) == sign(velocity.y)):
+	if(sign(position.y - border.y) == sign(linear_velocity.y) && sign(linear_velocity.y + border.y) == sign(linear_velocity.y)):
 		queue_free()
 		#Destroy the entity
 	
