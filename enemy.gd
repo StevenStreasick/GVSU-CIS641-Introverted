@@ -5,10 +5,6 @@ var rightSide = rng.randi_range(0, 1)
 var sideSign = (1 - rightSide) * 2 - 1
 
 var TURNSPEED = 15 #degrees/sec
-#TODO: I believe that my easiest path forward will be to use the default viewport, and resize that using the 
-#	size function. Granted, I will have to take the scalar and adjust it based on that.
-#@export var velocity = rng.randi_range(50, 200)
-
 
 @onready var main = get_parent()
 @onready var player = main.get_node("Player")
@@ -17,18 +13,20 @@ var TURNSPEED = 15 #degrees/sec
 @onready var viewportSize = camera.get_viewport_rect().size
 @onready var velocityRange: Vector2 = enemyController.getEnemyVelocity()
 
-
-
-func start() -> void:
-	#position = Vector2(0, 0)
+#TODO: Rename this to horizontalEnemy
+#TODO: Extend a 'enemy' class which declares a spawn() function to be implemented
+func spawn() -> bool:
 	var screensize = viewportSize / camera.zoom
-
 	var x = -sideSign * screensize.x / 2
 	var yHalved = screensize.y / 2
 	var y = rng.randf_range(-yHalved, yHalved) 
-	position = Vector2(x, y)
-	linear_velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
 	
+	position = Vector2(x, y)
+	
+	linear_velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
+
+	return true;
+
 func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vector2:
 	# Calculate direction vector to the player
 	var dx = playerPos.x - position.x
@@ -60,8 +58,7 @@ func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vect
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	start()
-
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -77,11 +74,8 @@ func _process(delta: float) -> void:
 
 	#position += delta * velocity
 	
-	
 	var screensize = viewportSize / camera.zoom
 	var border = screensize / 2
-	#TODO: Test the enemy culling to ensure that entities are properly being destroyed
-	# 		Run with only a single enemy, and print to ensure that the if statements are properly ran
 	#TODO: Handle enemy size. 
 	if(position.x < -border.x && sign(linear_velocity.x) == -1):
 		queue_free()
@@ -93,4 +87,3 @@ func _process(delta: float) -> void:
 	if(sign(position.y - border.y) == sign(linear_velocity.y) && sign(linear_velocity.y + border.y) == sign(linear_velocity.y)):
 		queue_free()
 		#Destroy the entity
-	

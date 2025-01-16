@@ -1,10 +1,13 @@
 extends Node2D
 
-var enemy = preload("res://enemy.tscn")
 var barrier = preload("res://Barrier.tscn")
 
 @onready var frame_rate_controller = get_node("FrameRateController")
 @onready var enemy_controller = get_node("EnemyController")
+
+var enemies = {
+	horizontalEnemy = preload("res://enemy.tscn")
+}
 
 @onready var start_button = $CanvasLayer/CenterContainer/Start
 @onready var game_over = $CanvasLayer/CenterContainer/GameOver
@@ -65,6 +68,18 @@ func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize,
 	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables
 
+func spawnEnemy() -> PhysicsBody2D:
+	var length = enemies.length
+	var enemyIndex = rng.randi_range(0, length - 1) #randi_range is fully inclusive
+	
+	var e = enemies[enemyIndex].instantiate()
+	
+	e.scale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
+	e.spawn()
+	add_child(e)
+	
+	return e
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var spawnrate = enemy_controller.getNumEnemies()
@@ -88,12 +103,8 @@ func _process(delta: float) -> void:
 		print("Times up")	
 		
 	if rng.randf() < spawnrate * delta:
-		#print("Spawning an Enemy")
-		var e = enemy.instantiate()
-		e.scale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
-		e.position = Vector2(-10000, -10000)
-		add_child(e)
-
+		
+		spawnEnemy()
 
 func _on_player_ate_enemy(area : PhysicsBody2D) -> void:
 	score += area.scale.length() * DEFAULTSPRITESIZE 
