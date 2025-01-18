@@ -6,7 +6,8 @@ var barrier = preload("res://Barrier.tscn")
 @onready var enemy_controller = get_node("EnemyController")
 
 var enemies = [
-	preload("res://horizontal_enemy.tscn")
+	preload("res://horizontal_enemy.tscn"),
+	preload("res://vertical_enemy.tscn")
 ]
 
 @onready var start_button = $CanvasLayer/CenterContainer/Start

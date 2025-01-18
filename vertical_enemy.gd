@@ -4,14 +4,17 @@ var rightSide = rng.randi_range(0, 1)
 var sideSign = (1 - rightSide) * 2 - 1
 
 func spawn() -> bool:
+	print("Spawning Vertical Enemy")
 	var screensize = viewportSize / camera.zoom
-	var x = -sideSign * screensize.x / 2
-	var yHalved = screensize.y / 2
-	var y = rng.randf_range(-yHalved, yHalved) 
+	
+	var xHalfed = screensize.x / 2
+	
+	var x = rng.randf_range(-xHalfed, xHalfed) 
+	var y = -sideSign * screensize.y / 2
 	
 	position = Vector2(x, y)
 	
-	linear_velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
+	linear_velocity = Vector2(0, randf_range(velocityRange.x, velocityRange.y) * sideSign)
 
 	return true;
 
@@ -66,13 +69,15 @@ func _process(delta: float) -> void:
 	var screensize = viewportSize / camera.zoom
 	var border = screensize / 2
 	#TODO: Handle enemy size. 
-	if(position.x < -border.x && sign(linear_velocity.x) == -1):
+	if(position.y < -border.y && sign(linear_velocity.y) == -1):
 		queue_free()
-	if(position.x > border.x && sign(linear_velocity.x) == 1):
+		
+	if(position.y > border.y && sign(linear_velocity.y) == 1):
 		queue_free()
-	#if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
+
+	#if(sign(position.x - border.x) == sign(linear_velocity.x) && sign(position.x + border.x) == sign(linear_velocity.x)):	
 		#queue_free()
 		#Destroy the entity
-	if(sign(position.y - border.y) == sign(linear_velocity.y) && sign(linear_velocity.y + border.y) == sign(linear_velocity.y)):
-		queue_free()
+	#if(sign(position.y - border.y) == sign(linear_velocity.y) && sign(linear_velocity.y + border.y) == sign(linear_velocity.y)):
+		#queue_free()
 		#Destroy the entity
