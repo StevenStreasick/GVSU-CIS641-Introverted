@@ -6,16 +6,28 @@ var sideSign = (1 - rightSide) * 2 - 1
 
 var TURNSPEED = 15 #degrees/sec
 
-@onready var main = get_parent()
-@onready var player = main.get_node("Player")
-@onready var enemyController = main.get_node("EnemyController")
-@onready var camera: Camera2D = main.get_node("Camera2D")
-@onready var viewportSize = camera.get_viewport_rect().size
-@onready var velocityRange: Vector2 = enemyController.getEnemyVelocity()
+var main;
+var player;
+var enemyController;
+var camera;
+var viewportSize;
+var velocityRange;
 
-#TODO: Rename this to horizontalEnemy
+#Extract this out into an enemy class
+func initialize(main: Node2D) -> bool:
+	
+	self.main = main
+	player = main.get_node("Player")
+	enemyController = main.get_node("EnemyController")
+	camera = main.get_node("Camera2D")
+	viewportSize = camera.get_viewport_rect().size
+	velocityRange = enemyController.getEnemyVelocity()
+	
+	return true
+	
 #TODO: Extend a 'enemy' class which declares a spawn() function to be implemented
 func spawn() -> bool:
+	print("Spawning an enemy")
 	var screensize = viewportSize / camera.zoom
 	var x = -sideSign * screensize.x / 2
 	var yHalved = screensize.y / 2
@@ -58,6 +70,7 @@ func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vect
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	#print("Running")
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -64,11 +64,11 @@ func move_player(delta: float) -> void:
 			ateEnemy.emit(collider)
 
 func get_lower_bounds() -> Vector2:
-	var screensize = viewportSize / camera.zoom
+	screensize = viewportSize / camera.zoom
 	return offset - (screensize / 2)
 
 func get_upper_bounds() -> Vector2:
-	var screensize = viewportSize / camera.zoom
+	screensize = viewportSize / camera.zoom
 	return (screensize / 2) + offset
 
 func check_bounds() -> void:
