@@ -7,6 +7,12 @@ var acceleration = 150
 
 var growthRate = 0.012
 var decayRate = 3
+
+var collisionActive = false
+var health = 2
+var debounce_time = 0.5  # Time in seconds to debounce collision
+var collision_timer = -1
+
 signal died
 signal ateEnemy
 
@@ -15,9 +21,6 @@ signal ateEnemy
 
 @onready var viewportSize = camera.get_viewport_rect().size
 @onready var offset = camera.offset
-
-func init() -> String:
-	return "Hello"
 
 func start() -> void:
 	position = Vector2.ZERO
@@ -55,14 +58,36 @@ func move_player(delta: float) -> void:
 		#print("Collision")
 		if !collider:
 			return
+		#print("Collision")
+		if collider.is_in_group("Spikes"):
+
+			if collision_timer >= 0.0:
+				collision_timer = debounce_time
+				return
+				
+			collision_timer = debounce_time
+			print("Collided with the spikes")
+			health -= 1
+			
+			if health < 1:
+				died.emit()
+	
+		#Check if the player is powered up
+
 		if !collider.is_in_group("Enemies"):
 			return
-		
+	
 		if collider.scale > scale:
 			died.emit()
 		else:
 			ateEnemy.emit(collider)
+	else:
+		#print("No collision")
+		collision_timer -= delta
 
+
+
+				
 func get_lower_bounds() -> Vector2:
 	screensize = viewportSize / camera.zoom
 	return offset - (screensize / 2)

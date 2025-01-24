@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://droddjnofk4dd" path="res://player.tscn" id="7_8m5b6"]
 
 [node name="Main" type="Node2D"]
+process_mode = 3
 script = ExtResource("1_jwaqc")
 
 [node name="Background" type="Sprite2D" parent="."]
@@ -42,3 +43,4 @@ script = ExtResource("6_ub8a8")
 [node name="Player" parent="." instance=ExtResource("7_8m5b6")]
 
 [connection signal="pressed" from="CanvasLayer/CenterContainer/Start" to="." method="startGame"]
+[connection signal="died" from="Player" to="." method="endGame"]
