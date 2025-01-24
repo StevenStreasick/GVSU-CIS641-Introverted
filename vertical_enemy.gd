@@ -14,9 +14,10 @@ func spawn() -> bool:
 	
 	position = Vector2(x, y)
 	
-	linear_velocity = Vector2(0, randf_range(velocityRange.x, velocityRange.y) * sideSign)
+	vel = Vector2(0, randf_range(velocityRange.x, velocityRange.y) * sideSign)
 
 	return true;
+	
 
 func get_velocity_for_targeting_player(delta: float, playerPos: Vector2) -> Vector2:
 	# Calculate direction vector to the player
@@ -69,10 +70,10 @@ func _process(delta: float) -> void:
 	var screensize = viewportSize / camera.zoom
 	var border = screensize / 2
 	#TODO: Handle enemy size. 
-	if(position.y < -border.y && sign(linear_velocity.y) == -1):
+	if(position.y < -border.y && sign(vel.y) == -1):
 		queue_free()
 		
-	if(position.y > border.y && sign(linear_velocity.y) == 1):
+	if(position.y > border.y && sign(vel.y) == 1):
 		queue_free()
 
 	#if(sign(position.x - border.x) == sign(linear_velocity.x) && sign(position.x + border.x) == sign(linear_velocity.x)):	

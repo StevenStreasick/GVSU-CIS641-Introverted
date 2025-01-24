@@ -11,6 +11,7 @@ var enemyController;
 var camera;
 var viewportSize;
 var velocityRange;
+var vel: Vector2 = Vector2.ZERO;
 
 func initialize(main: Node2D) -> bool:
 	
@@ -22,6 +23,9 @@ func initialize(main: Node2D) -> bool:
 	velocityRange = enemyController.getEnemyVelocity()
 	
 	return true
+	
+func _integrate_forces(bodyState : PhysicsDirectBodyState2D) -> void:
+	linear_velocity = vel
 
 func spawn() -> bool:
 	return true

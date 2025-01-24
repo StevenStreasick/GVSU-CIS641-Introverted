@@ -11,7 +11,7 @@ func spawn() -> bool:
 	
 	position = Vector2(x, y)
 	
-	linear_velocity = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
+	vel = Vector2(randf_range(velocityRange.x, velocityRange.y) * sideSign, 0)
 
 	return true;
 
@@ -66,13 +66,13 @@ func _process(delta: float) -> void:
 	var screensize = viewportSize / camera.zoom
 	var border = screensize / 2
 	#TODO: Handle enemy size. 
-	if(position.x < -border.x && sign(linear_velocity.x) == -1):
+	if(position.x < -border.x && sign(vel.x) == -1):
 		queue_free()
-	if(position.x > border.x && sign(linear_velocity.x) == 1):
+	if(position.x > border.x && sign(vel.x) == 1):
 		queue_free()
 	#if(sign(position.x - border.x) == sign(velocity.x) && sign(position.x + border.x) == sign(velocity.x)):	
 		#queue_free()
 		#Destroy the entity
-	if(sign(position.y - border.y) == sign(linear_velocity.y) && sign(linear_velocity.y + border.y) == sign(linear_velocity.y)):
+	if(sign(position.y - border.y) == sign(vel.y) && sign(vel.y + border.y) == sign(linear_velocity.y)):
 		queue_free()
 		#Destroy the entity
