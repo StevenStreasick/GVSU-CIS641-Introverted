@@ -10,6 +10,7 @@ friction = 0.0
 radius = 128.0
 
 [node name="RigidBody2D" type="RigidBody2D" groups=["Enemies"]]
+z_index = 1
 collision_layer = 2
 mass = 0.001
 physics_material_override = SubResource("PhysicsMaterial_1sdsi")

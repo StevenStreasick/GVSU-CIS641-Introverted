@@ -2,6 +2,8 @@ extends Node2D
 
 var barrier = preload("res://Barrier.tscn")
 var spikewall = preload("res://spike_wall.tscn")
+var invincibility = preload("res://invincibility.tscn")
+var wall_consumption = preload("res://wall_consumption.tscn")
 
 @onready var frame_rate_controller = get_node("FrameRateController")
 @onready var enemy_controller = get_node("EnemyController")
@@ -59,10 +61,16 @@ func _ready() -> void:
 	$CanvasLayer/UI.hide()
 	var b = barrier.instantiate()
 	var s = spikewall.instantiate()
+	var i = invincibility.instantiate()
+	var w = wall_consumption.instantiate()
 	b.position = Vector2(250, 250)
-	s.position = Vector2(-250, -250)
+	s.position = Vector2(-250, 250)
+	i.position = Vector2(-250, -250)
+	w.position = Vector2(250, -250)
 	add_child(b)
 	add_child(s)
+	add_child(i)
+	add_child(w)
 
 func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \

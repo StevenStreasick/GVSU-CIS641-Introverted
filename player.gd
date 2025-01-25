@@ -13,6 +13,9 @@ var health = 2
 var debounce_time = 0.5  # Time in seconds to debounce collision
 var collision_timer = -1
 
+var powerup = null;
+var powerup_timer = 0
+
 signal died
 signal ateEnemy
 
@@ -50,8 +53,24 @@ func clamp_velocity() -> void:
 	if velocity.length() > MAXVELOCITY:
 		velocity = velocity.normalized() * MAXVELOCITY
 
+func isPowerupActive() -> bool:
+	return (powerup_timer > 0)
+
+func collided_with_powerup(collider):
+	powerup = collider.PowerupName
+	powerup_timer = collider.ActiveTime
+	collider.queue_free()
+
+func collided_with_wall(collider):
+	if (isPowerupActive()) and (
+			powerup.naturalnocasecmp_to('Wall_Consumption') == 0):
+		collider.queue_free()
 
 func collided_with_spikes():
+	if isPowerupActive() and (
+			powerup.naturalnocasecmp_to('Invincibility') == 0):
+		return;
+		
 	if collision_timer >= 0.0:
 		collision_timer = debounce_time
 		return
@@ -61,15 +80,16 @@ func collided_with_spikes():
 		
 	if health < 1:
 		died.emit()
-
+	
 func collided_with_enemy(collider):
 	if collider.scale > scale:
 		died.emit()
 	else:
+		if isPowerupActive() and powerup == "invincibility":
+			collider.queue_free()
+			return
+
 		ateEnemy.emit(collider)
-		
-func collided_with_powerup():
-	pass
 			
 func no_collision(delta):
 	collision_timer -= delta
@@ -77,16 +97,23 @@ func no_collision(delta):
 func move_player(delta: float) -> void:
 	var collision = move_and_collide(velocity * delta)
 	
+	powerup_timer -= delta
+	
 	if collision:
 		var collider = collision.get_collider()
-		#print("Collision")
+	
 		if !collider:
 			return
 			
 		if collider.is_in_group("Spikes"):
 			collided_with_spikes()		
 	
+		if collider.is_in_group("Walls"):
+			collided_with_wall(collider)
+			
 		#Check if the player is powered up
+		if collider.is_in_group("Power_Up"):
+			collided_with_powerup(collider)
 
 		if collider.is_in_group("Enemies"):
 			collided_with_enemy(collider)
