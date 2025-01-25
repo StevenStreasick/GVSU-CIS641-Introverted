@@ -50,6 +50,30 @@ func clamp_velocity() -> void:
 	if velocity.length() > MAXVELOCITY:
 		velocity = velocity.normalized() * MAXVELOCITY
 
+
+func collided_with_spikes():
+	if collision_timer >= 0.0:
+		collision_timer = debounce_time
+		return
+			
+	collision_timer = debounce_time
+	health -= 1
+		
+	if health < 1:
+		died.emit()
+
+func collided_with_enemy(collider):
+	if collider.scale > scale:
+		died.emit()
+	else:
+		ateEnemy.emit(collider)
+		
+func collided_with_powerup():
+	pass
+			
+func no_collision(delta):
+	collision_timer -= delta
+	
 func move_player(delta: float) -> void:
 	var collision = move_and_collide(velocity * delta)
 	
@@ -58,34 +82,18 @@ func move_player(delta: float) -> void:
 		#print("Collision")
 		if !collider:
 			return
-		#print("Collision")
-		if collider.is_in_group("Spikes"):
-
-			if collision_timer >= 0.0:
-				collision_timer = debounce_time
-				return
-				
-			collision_timer = debounce_time
-			print("Collided with the spikes")
-			health -= 1
 			
-			if health < 1:
-				died.emit()
+		if collider.is_in_group("Spikes"):
+			collided_with_spikes()		
 	
 		#Check if the player is powered up
 
-		if !collider.is_in_group("Enemies"):
-			return
+		if collider.is_in_group("Enemies"):
+			collided_with_enemy(collider)
 	
-		if collider.scale > scale:
-			died.emit()
-		else:
-			ateEnemy.emit(collider)
 	else:
 		#print("No collision")
-		collision_timer -= delta
-
-
+		no_collision(delta)
 
 				
 func get_lower_bounds() -> Vector2:
