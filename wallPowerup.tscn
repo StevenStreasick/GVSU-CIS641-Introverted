@@ -1,14 +1,14 @@
 [gd_scene load_steps=4 format=3 uid="uid://dvhnu4jcal50d"]
 
+[ext_resource type="Script" path="res://wallPowerup.gd" id="1_06j2b"]
 [ext_resource type="Texture2D" uid="uid://cyr10xmbhb6ai" path="res://Powerup.png" id="1_662qm"]
-[ext_resource type="Script" path="res://wall_consumption.gd" id="1_pu7ul"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qj5q"]
 size = Vector2(60, 60)
 
 [node name="StaticBody2D" type="StaticBody2D" groups=["Power_Up"]]
 collision_layer = 4
-script = ExtResource("1_pu7ul")
+script = ExtResource("1_06j2b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Power_Up"]]
 shape = SubResource("RectangleShape2D_4qj5q")

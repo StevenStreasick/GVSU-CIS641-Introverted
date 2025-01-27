@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dv75dg36ingct"]
 
-[ext_resource type="Script" path="res://invincibility.gd" id="1_7wg0v"]
+[ext_resource type="Script" path="res://invincibilityPowerup.gd" id="1_apvb2"]
 [ext_resource type="Texture2D" uid="uid://cyr10xmbhb6ai" path="res://Powerup.png" id="1_xlo8v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qj5q"]
@@ -8,7 +8,7 @@ size = Vector2(60, 60)
 
 [node name="StaticBody2D" type="StaticBody2D" groups=["Power_Up"]]
 collision_layer = 4
-script = ExtResource("1_7wg0v")
+script = ExtResource("1_apvb2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Power_Up"]]
 shape = SubResource("RectangleShape2D_4qj5q")

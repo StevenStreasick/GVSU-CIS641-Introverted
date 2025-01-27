@@ -2,8 +2,8 @@ extends Node2D
 
 var barrier = preload("res://Barrier.tscn")
 var spikewall = preload("res://spike_wall.tscn")
-var invincibility = preload("res://invincibility.tscn")
-var wall_consumption = preload("res://wall_consumption.tscn")
+var invincibility = preload("res://invincibilityPowerup.tscn")
+var wall_consumption = preload("res://wallPowerup.tscn")
 
 @onready var frame_rate_controller = get_node("FrameRateController")
 @onready var enemy_controller = get_node("EnemyController")
@@ -22,12 +22,11 @@ var isGameActive = false
 var score: float = 0
 var time: float = 0
 
-
-var i = 0
+var fileNumber = 0
 var filePath = OS.get_user_data_dir() + "/sas_data/"
 #var filePath = "~/Documents/School/GVSU/2024FallSemester/CIS 641/Fishy Data/SAS Data/"
 #NOTE: You must press the X on the window instead of stopping the game so that the file will properly close.
-var file = FileAccess.open(filePath + "Run " + str(i) + ".txt", FileAccess.WRITE)
+var file = FileAccess.open(filePath + "Run " + str(fileNumber) + ".txt", FileAccess.WRITE)
 
 func startGame() -> void:
 	isGameActive = true
