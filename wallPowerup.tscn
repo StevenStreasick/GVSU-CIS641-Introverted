@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dvhnu4jcal50d"]
 
 [ext_resource type="Script" path="res://wallPowerup.gd" id="1_06j2b"]
-[ext_resource type="Texture2D" uid="uid://cyr10xmbhb6ai" path="res://Powerup.png" id="1_662qm"]
+[ext_resource type="Texture2D" uid="uid://c206hs15rpu4w" path="res://EatWalls.png" id="2_bn5ij"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qj5q"]
 size = Vector2(60, 60)
@@ -15,4 +15,4 @@ shape = SubResource("RectangleShape2D_4qj5q")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.125, 0.125)
-texture = ExtResource("1_662qm")
+texture = ExtResource("2_bn5ij")
