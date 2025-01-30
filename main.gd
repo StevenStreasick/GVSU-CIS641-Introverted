@@ -26,10 +26,10 @@ var score: float = 0
 var time: float = 0
 
 var fileNumber = 0
-var filePath = OS.get_user_data_dir() + "/sas_data/"
 #var filePath = "~/Documents/School/GVSU/2024FallSemester/CIS 641/Fishy Data/SAS Data/"
 #NOTE: You must press the X on the window instead of stopping the game so that the file will properly close.
-var file = FileAccess.open(filePath + "Run " + str(fileNumber) + ".txt", FileAccess.WRITE)
+var file
+#TODO: Fix the fils not being on some pcs...
 
 func startGame() -> void:
 	gameStarted.emit()
@@ -75,8 +75,25 @@ func _ready() -> void:
 	#add_child(s)
 	#add_child(i)
 	#add_child(w)
+	
+func getFileToWriteTo():
+	var filePath: String = OS.get_user_data_dir() + "/sas_data/"
+	var error = DirAccess.make_dir_absolute(filePath)
+	if error != null:
+		print(error)
+	
+	var d = DirAccess.open(filePath)
+	while(true):
+		if(!d.file_exists("Run " + str(fileNumber) + ".txt")):
+			break
+			
+		fileNumber += 1
+
+	file = FileAccess.open(filePath + "Run " + str(fileNumber) + ".txt", FileAccess.WRITE)
 
 func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
+	if file == null:
+		getFileToWriteTo()
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
 	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str("%2.3f" % numEnemies) \
 	 + "," + str(enemySize) + "," + str(enemyVelocity)  + "," + str("%2.3f" % enemySight) + "\n"
@@ -96,7 +113,6 @@ func spawnEnemy() -> PhysicsBody2D:
 	add_child(e)
 	
 	return e
-	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
