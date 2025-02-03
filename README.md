@@ -7,11 +7,13 @@ This project will consist of creating and testing one method of implementing a d
 * [Steven Streasick](https://github.com/StevenStreasick/GVSU-CIS641-Introverted/tree/main) https://github.com/StevenStreasick
 
 ## Prerequisites
-GoDot 4 and
-GitHub
+GoDot 4.3 - Stable release
 
 ## Run Instructions
-Download the ZIP file from the public repo. Then import a new project into GoDot 4 and choose the newly downloaded ZIP file. Then press the Play current Scene. 
+Download the ZIP file from the public repo. Then open GoDot and select 'Import'. GoDot will recognize and handle all of the project setup if you provide a zip file during this import process. After the project is created, the project can be played by pressing the 'Run Project' button in the top right. 
+
+## Data Collection
+The game will automatically create a folder under %app_data%/Godot/app_userdata/[PROJECT NAME] called 'sas_data'. The data will begin being collected 15 seconds after the game has started and will end 45 seconds after the game has started. When the data finishes collecting, a print out statement will display within the output stating 'Times up'. Each run will be automatically logged into a new text file, where each file following the naming scheme 'Run i.txt'
 
 ## Relevant Artifacts and Documents
 
