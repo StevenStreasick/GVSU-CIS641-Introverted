@@ -55,4 +55,5 @@ script = ExtResource("8_hnwmv")
 [connection signal="gameStarted" from="." to="PowerupController" method="beginSpawningEntities"]
 [connection signal="gameStarted" from="." to="WallController" method="spawnEntities"]
 [connection signal="pressed" from="CanvasLayer/CenterContainer/Start" to="." method="startGame"]
+[connection signal="ateEnemy" from="Player" to="." method="_on_player_ate_enemy"]
 [connection signal="died" from="Player" to="." method="endGame"]

@@ -94,9 +94,13 @@ func getFileToWriteTo():
 func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
 	if file == null:
 		getFileToWriteTo()
+	#TODO: Add playerScore
+	#		   playerSize
+	
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
 	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str("%2.3f" % numEnemies) \
-	 + "," + str(enemySize) + "," + str(enemyVelocity)  + "," + str("%2.3f" % enemySight) + "\n"
+	 + "," + str(enemySize) + "," + str(enemyVelocity)  + "," + str("%2.3f" % enemySight) \
+	 + "," + str(score) + "," + str($Player.scale.x) + "\n"
 	
 	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables

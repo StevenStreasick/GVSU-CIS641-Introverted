@@ -139,7 +139,7 @@ func _process(_delta: float) -> void:
 	updateVar(numEnemiesInfo)
 	updateVar(enemySizeInfo)
 	updateVar(enemyVelocityInfo)
-	updateVar(enemySightInfo)
+	#updateVar(enemySightInfo)
 	#print(enemySizeInfo.range)
 		
 	
