@@ -44,7 +44,7 @@ func updateVal(varInfoContainer: varInfo):
 		varInfoContainer.val = varToUpdate
 		return varToUpdate
 
-	varToUpdate = clamp(pow(happiness, 3) * offset, minVal, maxVal)
+	varToUpdate = clamp(pow(happiness, 3) * offset + minVal, minVal, maxVal) # + minVal
 	varInfoContainer.val = varToUpdate
 	return varToUpdate
 	
