@@ -120,9 +120,6 @@ func _ready() -> void:
 	enemyVelocityInfo = instantiateVarInfo(varInfo.new(), 50, 300, false)
 	enemySightInfo	= instantiateVarInfo(varInfo.new(), 1000, 1000, true)
 	
-
-
-
 func _process(_delta: float) -> void:
 	happiness = frameRateController.happiness
 	

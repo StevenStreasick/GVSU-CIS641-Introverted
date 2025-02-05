@@ -26,10 +26,8 @@ var score: float = 0
 var time: float = 0
 
 var fileNumber = 0
-#var filePath = "~/Documents/School/GVSU/2024FallSemester/CIS 641/Fishy Data/SAS Data/"
 #NOTE: You must press the X on the window instead of stopping the game so that the file will properly close.
 var file
-#TODO: Fix the fils not being on some pcs...
 
 func startGame() -> void:
 	gameStarted.emit()
@@ -94,18 +92,19 @@ func getFileToWriteTo():
 func convertVec2ToString(vec2: Vector2) -> String:
 	
 	return ("(%.3f %.3f)" % [vec2.x, vec2.y])
-	
 
 func writeToFile(currentTime) -> void:
 	if file == null:
 		getFileToWriteTo()
-	#TODO: Add min/max. Add whether smoothing is enabled
 	
 	var framerate = Engine.get_frames_per_second()
 	var happiness = frame_rate_controller.getHappiness()
 	var zoom = frame_rate_controller.getZoom()
 	
 	var smoothing = enemy_controller.getSmoothing()
+	
+	var playerSize = $Player.scale.x
+
 	var numEnemies = enemy_controller.getNumEnemies()
 	var numEnemiesRange = enemy_controller.getNumEnemiesRange()
 	var enemySize = enemy_controller.getEnemySize()
@@ -114,14 +113,14 @@ func writeToFile(currentTime) -> void:
 	var enemyVelocityRange = enemy_controller.getEnemyVelocityRange()
 	var enemySight = enemy_controller.getEnemySight()
 	var enemySightRange = enemy_controller.getEnemySightRange()
-		
+	
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
 	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str(smoothing) + "," \
 	+ str("%2.3f" % numEnemies) + "," + convertVec2ToString(numEnemiesRange) + "," \
 	+ convertVec2ToString(enemySize) + "," + convertVec2ToString(enemySizeRange) + "," \
 	+ convertVec2ToString(enemyVelocity) + "," + convertVec2ToString(enemyVelocityRange) + "," \
 	+ str("%2.3f" % enemySight) + "," + convertVec2ToString(enemySightRange) + "," \
-	+ str("%2.3f" % score) + "," + str("%2.3f" % $Player.scale.x) + "\n"
+	+ str("%2.3f" % score) + "," + str("%2.3f" % playerSize) + "\n"
 	
 	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables
@@ -133,6 +132,8 @@ func spawnEnemy() -> PhysicsBody2D:
 	var e = enemies[enemyIndex].instantiate()
 	
 	e.scale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
+	#TODO: Figure out why the enemy is not scaling with getEnemySize	
+	print($Player.scale.x)
 	e.initialize(self)
 	e.spawn()
 	add_child(e)
@@ -147,7 +148,6 @@ func _process(delta: float) -> void:
 
 	if (time < 45):
 		if (time > 15):
-			
 			
 			writeToFile(time)
 		time += delta
