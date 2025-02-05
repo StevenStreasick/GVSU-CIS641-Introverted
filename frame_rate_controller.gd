@@ -69,7 +69,7 @@ func _process(delta) -> void:
 			zoom = calcInterpolatedZoom(minZoom, delta)
 		_:
 			zoom = minZoom
-	
+	#zoom = .5
 	camera.zoom = Vector2.ONE * zoom
 	
 func getHappiness() -> float:

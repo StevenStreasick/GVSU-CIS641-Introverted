@@ -91,16 +91,37 @@ func getFileToWriteTo():
 
 	file = FileAccess.open(filePath + "Run " + str(fileNumber) + ".txt", FileAccess.WRITE)
 
-func writeToFile(currentTime, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight) -> void:
+func convertVec2ToString(vec2: Vector2) -> String:
+	
+	return ("(%.3f %.3f)" % [vec2.x, vec2.y])
+	
+
+func writeToFile(currentTime) -> void:
 	if file == null:
 		getFileToWriteTo()
-	#TODO: Add playerScore
-	#		   playerSize
+	#TODO: Add min/max. Add whether smoothing is enabled
 	
+	var framerate = Engine.get_frames_per_second()
+	var happiness = frame_rate_controller.getHappiness()
+	var zoom = frame_rate_controller.getZoom()
+	
+	var smoothing = enemy_controller.getSmoothing()
+	var numEnemies = enemy_controller.getNumEnemies()
+	var numEnemiesRange = enemy_controller.getNumEnemiesRange()
+	var enemySize = enemy_controller.getEnemySize()
+	var enemySizeRange = enemy_controller.getEnemySizeRange()
+	var enemyVelocity = enemy_controller.getEnemyVelocity()
+	var enemyVelocityRange = enemy_controller.getEnemyVelocityRange()
+	var enemySight = enemy_controller.getEnemySight()
+	var enemySightRange = enemy_controller.getEnemySightRange()
+		
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
-	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str("%2.3f" % numEnemies) \
-	 + "," + str(enemySize) + "," + str(enemyVelocity)  + "," + str("%2.3f" % enemySight) \
-	 + "," + str(score) + "," + str($Player.scale.x) + "\n"
+	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str(smoothing) + "," \
+	+ str("%2.3f" % numEnemies) + "," + convertVec2ToString(numEnemiesRange) + "," \
+	+ convertVec2ToString(enemySize) + "," + convertVec2ToString(enemySizeRange) + "," \
+	+ convertVec2ToString(enemyVelocity) + "," + convertVec2ToString(enemyVelocityRange) + "," \
+	+ str("%2.3f" % enemySight) + "," + convertVec2ToString(enemySightRange) + "," \
+	+ str("%2.3f" % score) + "," + str("%2.3f" % $Player.scale.x) + "\n"
 	
 	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables
@@ -126,16 +147,9 @@ func _process(delta: float) -> void:
 
 	if (time < 45):
 		if (time > 15):
-			var framerate = Engine.get_frames_per_second()
-			var happiness = frame_rate_controller.getHappiness()
-			var zoom = frame_rate_controller.getZoom()
 			
-			var numEnemies = enemy_controller.getNumEnemies()
-			var enemySize = enemy_controller.getEnemySize()
-			var enemyVelocity = enemy_controller.getEnemyVelocity()
-			var enemySight = enemy_controller.getEnemySight()
 			
-			writeToFile(time, framerate, happiness, zoom, numEnemies, enemySize, enemyVelocity, enemySight)
+			writeToFile(time)
 		time += delta
 	else:
 		print("Times up")	

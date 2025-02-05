@@ -148,14 +148,32 @@ func getVarVal(varInfoContainer: varInfo):
 		return varInfoContainer.val
 	return varInfoContainer.range
 	
+func getVarRange(varInfoContainer: varInfo):
+	return Vector2(varInfoContainer.minVal, varInfoContainer.maxVal)
+	
 func getNumEnemies():
 	return getVarVal(numEnemiesInfo)
 	
+func getNumEnemiesRange():
+	return getVarRange(numEnemiesInfo)
+	
 func getEnemySize():
 	return getVarVal(enemySizeInfo)
+	
+func getEnemySizeRange():
+	return getVarRange(enemySizeInfo)
 
 func getEnemyVelocity():
 	return getVarVal(enemyVelocityInfo)
 
+func getEnemyVelocityRange():
+	return getVarRange(enemyVelocityInfo)
+
 func getEnemySight():
 	return getVarVal(enemySightInfo)
+
+func getEnemySightRange():
+	return getVarRange(enemySightInfo)
+	
+func getSmoothing():
+	return smoothing
