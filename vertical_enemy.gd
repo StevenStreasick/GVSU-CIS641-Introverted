@@ -4,7 +4,6 @@ var rightSide = rng.randi_range(0, 1)
 var sideSign = (1 - rightSide) * 2 - 1
 
 func spawn() -> bool:
-	print("Spawning Vertical Enemy")
 	var screensize = viewportSize / camera.zoom
 	
 	var xHalfed = screensize.x / 2

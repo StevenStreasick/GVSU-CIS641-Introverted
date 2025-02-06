@@ -156,7 +156,6 @@ func _process(delta: float) -> void:
 		print("Times up")	
 		
 	if rng.randf() < spawnrate * delta:
-		print("Spawning an enemy")
 		spawnEnemy()
 		
 func _on_player_ate_enemy(area : PhysicsBody2D) -> void:
