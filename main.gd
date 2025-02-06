@@ -128,12 +128,13 @@ func writeToFile(currentTime) -> void:
 func spawnEnemy() -> PhysicsBody2D:
 	var length = enemies.size()
 	var enemyIndex = rng.randi_range(0, length - 1) #randi_range is fully inclusive
+	var setscale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
+
 	
 	var e = enemies[enemyIndex].instantiate()
-	
-	e.scale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
+	e.get_node("CollisionShape2D").scale = setscale#
+	e.get_node("Sprite2D").scale = setscale
 	#TODO: Figure out why the enemy is not scaling with getEnemySize	
-	print($Player.scale.x)
 	e.initialize(self)
 	e.spawn()
 	add_child(e)

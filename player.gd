@@ -82,7 +82,7 @@ func collided_with_spikes():
 		died.emit()
 	
 func collided_with_enemy(collider):
-	if collider.scale > scale:
+	if collider.get_node("CollisionShape2D").scale > scale:
 		died.emit()
 	else:
 		if isPowerupActive() and powerup == "invincibility":

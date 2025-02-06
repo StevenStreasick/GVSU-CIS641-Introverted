@@ -131,8 +131,7 @@ func _process(_delta: float) -> void:
 	
 	updateSmoothingVar()
 	
-	#print(str(happiness) + " " + str(smoothing))
-
+#Double check that these values update based on score as well.
 	updateVar(numEnemiesInfo)
 	updateVar(enemySizeInfo)
 	updateVar(enemyVelocityInfo)
