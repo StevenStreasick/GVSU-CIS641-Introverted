@@ -70,9 +70,11 @@ func _process(delta: float) -> void:
 	var border = screensize / 2
 	#TODO: Handle enemy size. 
 	if(position.y < -border.y && sign(vel.y) == -1):
+		died()
 		queue_free()
 		
 	if(position.y > border.y && sign(vel.y) == 1):
+		died()
 		queue_free()
 
 	#if(sign(position.x - border.x) == sign(linear_velocity.x) && sign(position.x + border.x) == sign(linear_velocity.x)):	

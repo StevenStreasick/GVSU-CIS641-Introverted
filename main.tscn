@@ -50,6 +50,7 @@ script = ExtResource("7_rqjaf")
 [node name="WallController" type="Node" parent="."]
 script = ExtResource("8_hnwmv")
 
+[connection signal="enemyDied" from="." to="." method="decEnemies"]
 [connection signal="gameEnded" from="." to="PowerupController" method="cleanupEntities"]
 [connection signal="gameEnded" from="." to="WallController" method="cleanupEntities"]
 [connection signal="gameStarted" from="." to="PowerupController" method="beginSpawningEntities"]

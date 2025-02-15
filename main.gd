@@ -2,6 +2,8 @@ extends Node2D
 
 signal gameStarted 
 signal gameEnded
+signal enemyDied;
+
 
 var barrier = preload("res://Barrier.tscn")
 var spikewall = preload("res://spike_wall.tscn")
@@ -15,6 +17,8 @@ var enemies = [
 	preload("res://horizontal_enemy.tscn"),
 	preload("res://vertical_enemy.tscn")
 ]
+
+var numberOfEnemies = 0
 
 @onready var start_button = $CanvasLayer/CenterContainer/Start
 @onready var game_over = $CanvasLayer/CenterContainer/GameOver
@@ -94,6 +98,7 @@ func convertVec2ToString(vec2: Vector2) -> String:
 	return ("(%.3f %.3f)" % [vec2.x, vec2.y])
 
 func writeToFile(currentTime) -> void:
+	#TODO: Write the current number of Enemies that are in the game.
 	if file == null:
 		getFileToWriteTo()
 	
@@ -114,18 +119,23 @@ func writeToFile(currentTime) -> void:
 	var enemySight = enemy_controller.getEnemySight()
 	var enemySightRange = enemy_controller.getEnemySightRange()
 	
+	var zoomAdaptations = frame_rate_controller.getZoomAdaptations()
+	var enemyAdaptations = frame_rate_controller.getEnemyAdaptations()
+	
 	var concatString = str("%2.3f" % currentTime) + "," + str("%2.3f" % framerate) + "," \
 	+ str("%2.3f" % happiness)  + "," + str("%2.3f" % zoom)  + "," + str(smoothing) + "," \
 	+ str("%2.3f" % numEnemies) + "," + convertVec2ToString(numEnemiesRange) + "," \
 	+ convertVec2ToString(enemySize) + "," + convertVec2ToString(enemySizeRange) + "," \
 	+ convertVec2ToString(enemyVelocity) + "," + convertVec2ToString(enemyVelocityRange) + "," \
 	+ str("%2.3f" % enemySight) + "," + convertVec2ToString(enemySightRange) + "," \
-	+ str("%2.3f" % score) + "," + str("%2.3f" % playerSize) + "\n"
+	+ str("%2.3f" % score) + "," + str("%2.3f" % playerSize) + "," + str("%d" % numberOfEnemies) \
+	+ "," + str("%2d" % zoomAdaptations) + "," + str("%2d" % enemyAdaptations) + "\n"
 	
 	file.store_string(concatString)
 	#NOTE: # enemies and enemySight are fixed variables
 
 func spawnEnemy() -> PhysicsBody2D:
+	numberOfEnemies += 1
 	var length = enemies.size()
 	var enemyIndex = rng.randi_range(0, length - 1) #randi_range is fully inclusive
 	var setscale = getEnemyScaleFromRange(enemy_controller.getEnemySize())
@@ -140,6 +150,9 @@ func spawnEnemy() -> PhysicsBody2D:
 	add_child(e)
 	
 	return e
+
+func decEnemies() -> void:
+	numberOfEnemies -= 1
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

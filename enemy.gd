@@ -24,6 +24,10 @@ func initialize(mainToSetTo: Node2D) -> bool:
 	
 	return true
 	
+func died() -> bool:
+	main.emit_signal("enemyDied")
+	return true
+	
 func _integrate_forces(_bodyState : PhysicsDirectBodyState2D) -> void:
 	linear_velocity = vel
 

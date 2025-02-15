@@ -49,7 +49,8 @@ func cleanupEntities() -> bool:
 	gameActive = false
 	
 	for v in powerupEntities:
-		v.queue_free()
+		if v:
+			v.queue_free()
 		
 	powerupEntities.clear()
 	

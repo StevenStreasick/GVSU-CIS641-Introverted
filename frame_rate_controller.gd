@@ -14,6 +14,10 @@ var minimumSmoothZoomFramerate = 850
 var minZoom = 1
 var zoom = 1
 
+var previousFramerate = 0;
+var zoomAdaptations = 0;
+var enemyAdapatations = 0;
+
 @export var happiness = 0.0
 
 @onready var main = get_parent()
@@ -25,7 +29,24 @@ var zoom = 1
 #Maybe I could get the default screen size and then multiply it by the zoom factor 
 
 func update_framerate() -> float:
+	previousFramerate = framerate
 	framerate = Engine.get_frames_per_second()
+	
+	if(previousFramerate == null):
+		return framerate
+	
+	if(framerate == previousFramerate):
+		return framerate
+	
+	if(!(previousFramerate < minimumSmoothZoomFramerate && framerate < minimumSmoothZoomFramerate)):
+		if(!(previousFramerate > maximumDynamicZoomFramerate && framerate > maximumDynamicZoomFramerate)):
+			zoomAdaptations += 1
+	#minimumFramerate
+	#idealFramerate
+	if(!(previousFramerate < minimumFramerate && framerate < minimumFramerate)):
+		if(!(previousFramerate > idealFramerate && framerate > idealFramerate)):
+			enemyAdapatations += 1
+
 	return framerate
 
 func determineHappiness():
@@ -77,3 +98,9 @@ func getHappiness() -> float:
 
 func getZoom() -> float:
 	return zoom
+
+func getZoomAdaptations() -> float:
+	return zoomAdaptations
+
+func getEnemyAdaptations() -> float:
+	return enemyAdapatations
