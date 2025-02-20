@@ -1,3 +1,4 @@
+import itertools
 import os
 import plotly.express as px
 import matplotlib.pyplot as plt
@@ -6,6 +7,8 @@ import pandas as pd
 import math
 import numpy as np
 import re
+
+from scipy import stats
 
 from pathlib import Path
 
@@ -31,7 +34,7 @@ COLUMNS = {"Machine": str, "Run": int, "Time": float, "Framerate": float, "FPS_S
 
 def iterate_subfolders(root_dir):
     """
-    Iterates over all subfolders within the given root directory and returns a dictionary.
+    Iterates over direct subfolders within the given root directory and returns a dictionary.
     
     Args:
         root_dir (str): The path to the root directory.
@@ -41,10 +44,14 @@ def iterate_subfolders(root_dir):
     """
     subfolders = {}
 
-    for dirpath, dirnames, _ in os.walk(root_dir):
+    # Get only the first level of subdirectories
+    try:
+        _, dirnames, _ = next(os.walk(root_dir))  # Get only the immediate children
         for dirname in dirnames:
-            subfolder_path = os.path.join(dirpath, dirname)
+            subfolder_path = os.path.join(root_dir, dirname)
             subfolders[dirname] = subfolder_path + "\\"
+    except StopIteration:
+        pass  # Handle the case where the directory doesn't exist or is empty
 
     return subfolders
 
@@ -75,20 +82,23 @@ def writeDataFromFile(data, folderName, file, i):
 
 def setTypes(df):
         for colName, colType in COLUMNS.items():
+                print(f"Setting {colName} to {colType}")
                 df[colName] = df[colName].astype(colType)
 
         return df
 
 def initDF():
         data = []
-
+        readFromFile = False
         if os.path.isfile(sas_data_folder + csv_file_name):
                 #Read in the file. 
+                readFromFile = True
                 data = pd.read_csv(sas_data_folder + csv_file_name)
         else:
                 
                 subfolders = iterate_subfolders(sas_data_folder)
                 for folderName, folderPath in subfolders.items():
+                        print(f"Reading files from {folderName}")
                         for i in range(0, 100):
                                 file_path = folderPath + "Run " + str(i) + ".txt"
                                 
@@ -101,7 +111,10 @@ def initDF():
 
         df = pd.DataFrame(np.array(data), columns = COLUMNS.keys())
 
-        df = setTypes(df)        
+        df = setTypes(df)      
+
+        if not readFromFile:
+               df.to_csv(sas_data_folder + csv_file_name, index=False)
 
         return df
 
@@ -109,12 +122,25 @@ def initDF():
 # df.set_index(indexes, inplace=True)
 df = initDF()
 
+
 pd.set_option('display.max_rows', None)
 
 # Display all columns
 pd.set_option('display.max_columns', None)
 
-# df = df.convert_dtypes()
+machines = df['Machine'].unique()
+
+allCombinations = list(itertools.combinations(machines, 2))
+
+for _, v in enumerate(allCombinations):
+        dataset1 = df[df['Machine'] == v[0]]
+        dataset2 = df[df['Machine'] == v[1]]
+        
+        enemyAdaptations1 = dataset1.groupby("Run")["Enemy_Adaptations"].max()
+        enemyAdaptations2 = dataset2.groupby("Run")["Enemy_Adaptations"].max()
+
+        print(f"p value for {v[0]} and {v[1]}: {stats.mannwhitneyu(enemyAdaptations1, enemyAdaptations2).pvalue}")
+
 
 # print(df.dtypes)
 # print(df.corr())
@@ -167,7 +193,7 @@ plt.tight_layout()
 
 #Number of violations - Number of times FPS satisfaction drops to 0?
 #                     - Zooom
-fredericksruns = df[df['Machine'] == 'Fredericks-LatitudeRuns']
+fredericksruns = df[df['Machine'] == 'Latitude']
 
 frederick_groupbyruns = fredericksruns.groupby("Run")
 
@@ -177,11 +203,13 @@ violations = frederick_groupbyruns.apply(
         ((g["Framerate"] == 0) & (g["Framerate"].shift(1) != 0)).sum()
     ),
     include_groups=False  # Fixes the DeprecationWarning
-).reset_index(name="Violations")
+).reset_index(name='Violations')
 
-fig = px.bar(violations, x='Run', y='Violations')
-fig.show()
+# print(violations.head())
+
+
+# fig = px.bar(violations, x='Run', y='Violations')
+# fig.show()
 
 # print(violations)
 
-df.to_csv(sas_data_folder + csv_file_name, index=False)
