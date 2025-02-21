@@ -108,108 +108,117 @@ def initDF():
                                 f = open(file_path, 'r')
 
                                 writeDataFromFile(data, folderName, f, i)
+                               
 
         df = pd.DataFrame(np.array(data), columns = COLUMNS.keys())
 
         df = setTypes(df)      
 
         if not readFromFile:
-               df.to_csv(sas_data_folder + csv_file_name, index=False)
+               
+                df.to_csv(sas_data_folder + csv_file_name, index=False)
 
         return df
 
-# Set a MultiIndex with (run, frame)
-# df.set_index(indexes, inplace=True)
+def getMachines(df):
+        return df['Machine'].unique()
+
+def getMachineCombinations(df):
+        machines = getMachines(df)
+
+        allCombinations = list(itertools.combinations(machines, 2))
+
+        return allCombinations
+
+def displayPValueGraph(df):
+        allCombinations = getMachineCombinations(df)
+
+        pValuesDF = pd.DataFrame(columns=["Pair", "pValue", "Adaptation"])
+
+        for _, v in enumerate(allCombinations):
+                dataset1 = df[df['Machine'] == v[0]]
+                dataset2 = df[df['Machine'] == v[1]]
+                
+                enemyAdaptations1 = dataset1.groupby("Run")["Enemy_Adaptations"].max()
+                enemyAdaptations2 = dataset2.groupby("Run")["Enemy_Adaptations"].max()
+
+                enemy_pval = stats.mannwhitneyu(enemyAdaptations1, enemyAdaptations2).pvalue
+                print(f"p value for Enemy Adaptations with pair {v[0]} and {v[1]}: {enemy_pval:.4f}")
+                pValuesDF = pd.concat([pValuesDF, pd.DataFrame({"Pair": [f"{v[0]} vs {v[1]}"], "pValue": [enemy_pval], "Adaptation": ["Enemy Adaptations"]})], ignore_index=True)
+
+        for _, v in enumerate(allCombinations):
+                dataset1 = df[df['Machine'] == v[0]]
+                dataset2 = df[df['Machine'] == v[1]]
+                
+                zoomAdaptations1 = dataset1.groupby("Run")["Zoom_Adaptations"].max()
+                zoomAdaptations2 = dataset2.groupby("Run")["Zoom_Adaptations"].max()
+
+                zoom_pval = stats.mannwhitneyu(zoomAdaptations1, zoomAdaptations2).pvalue
+
+                print(f"p value for Zoom Adaptations with pair {v[0]} and {v[1]}: {zoom_pval:.4f}")
+                
+                pValuesDF = pd.concat([pValuesDF, pd.DataFrame({"Pair": [f"{v[0]} vs {v[1]}"], "pValue": [zoom_pval], "Adaptation": ["Zoom Adaptations"]})], ignore_index=True)
+
+        plt.figure(figsize=(10, 6))
+        sns.barplot(data=pValuesDF, x="Pair", y="pValue", hue="Adaptation", palette="Set2")
+        plt.yscale("log")
+
+        # Labels and Formatting
+        plt.axhline(y=0.05, color='r', linestyle='--', label="Significance Threshold (0.05)")
+        plt.xticks(rotation=45, ha="right")
+        plt.xlabel("Computer Pair")
+        plt.ylabel("p-value")
+        plt.title("p-values for Enemy and Zoom Adaptations")
+        plt.legend()
+        plt.tight_layout()
+        # plt.show()
+
+def displayAdaptations(df):
+
+        df_melted = df.melt(id_vars=['Machine'], value_vars=['Zoom_Adaptations', 'Enemy_Adaptations'],
+                     var_name='Adaptation Type', value_name='Count')
+
+        plt.figure(figsize=(8, 6))
+
+        sns.boxplot(x='Machine', y='Count', hue='Adaptation Type', data=df_melted, palette={'Zoom_Adaptations': '#1f77b4', 'Enemy_Adaptations': '#ff7f0e'})
+
+        plt.xlabel('Configuration')
+        plt.ylabel('Adaptation Count')
+        plt.title('Adaptations per Machine')
+
+        plt.tight_layout()
+
+        plt.show()
+
+
+def displayViolations(df):
+        fredericksruns = df[df['Machine'] == 'Latitude']
+
+        frederick_groupbyruns = fredericksruns.groupby("Run")
+
+        violations = frederick_groupbyruns.apply(
+        lambda g: (
+                ((g["FPS_Satisfaction"] == 0) & (g["FPS_Satisfaction"].shift(1) != 0)).sum() +
+                ((g["Framerate"] == 0) & (g["Framerate"].shift(1) != 0)).sum()
+        ),
+        include_groups=False  # Fixes the DeprecationWarning
+        ).reset_index(name='Violations')
+
+
+
+
+
 df = initDF()
 
-
 pd.set_option('display.max_rows', None)
-
-# Display all columns
 pd.set_option('display.max_columns', None)
 
-machines = df['Machine'].unique()
 
-allCombinations = list(itertools.combinations(machines, 2))
-
-for _, v in enumerate(allCombinations):
-        dataset1 = df[df['Machine'] == v[0]]
-        dataset2 = df[df['Machine'] == v[1]]
-        
-        enemyAdaptations1 = dataset1.groupby("Run")["Enemy_Adaptations"].max()
-        enemyAdaptations2 = dataset2.groupby("Run")["Enemy_Adaptations"].max()
-
-        print(f"p value for {v[0]} and {v[1]}: {stats.mannwhitneyu(enemyAdaptations1, enemyAdaptations2).pvalue}")
-
-
-# print(df.dtypes)
-# print(df.corr())
-
-run_0 = df[df['Run'] == 0]
-run_9 = df[df['Run'] == 9]
-
-fig = px.line(run_9, x='Time', y='FPS_Satisfaction', color="Machine")
-# fig.show()
-
-groupbyruns_noindex = df.groupby("Run")
-groupbyruns = df.groupby("Run", as_index = False)
-
-# number_of_zoom_adaptations = groupbyruns["Zoom_Adaptations"].max()
-#I could try the shift magic stuff to get this calculation?
 # print(df.head())
+# displayPValueGraph(df)
 
-# Create the bar chart for the mean values
-plt.figure(figsize=(8, 6))
+# displayAdaptations(df)
 
-# Create a boxplot
-sns.boxplot(y=df['Zoom_Adaptations'], color='#1f77b4')
+# displayViolations(df)
 
-# Set labels and title
-plt.ylabel('Zoom Adaptations')
-plt.xlabel('')
-plt.title('')
-
-plt.tight_layout()
-
-# Show the plot
-# plt.show()
-
-
-# number_of_enemy_adaptations = groupbyruns["Enemy_Adaptations"].max()
-plt.figure(figsize=(8, 6))
-
-# Create a boxplot
-sns.boxplot(y=df['Enemy_Adaptations'], color='#1f77b4')
-
-# Set labels and title
-plt.ylabel('Enemy Adaptations')
-plt.xlabel('')
-plt.title('')
-
-plt.tight_layout()
-
-# Show the plot
-# plt.show()
-
-#Number of violations - Number of times FPS satisfaction drops to 0?
-#                     - Zooom
-fredericksruns = df[df['Machine'] == 'Latitude']
-
-frederick_groupbyruns = fredericksruns.groupby("Run")
-
-violations = frederick_groupbyruns.apply(
-    lambda g: (
-        ((g["FPS_Satisfaction"] == 0) & (g["FPS_Satisfaction"].shift(1) != 0)).sum() +
-        ((g["Framerate"] == 0) & (g["Framerate"].shift(1) != 0)).sum()
-    ),
-    include_groups=False  # Fixes the DeprecationWarning
-).reset_index(name='Violations')
-
-# print(violations.head())
-
-
-# fig = px.bar(violations, x='Run', y='Violations')
-# fig.show()
-
-# print(violations)
-
+print(df.columns)
