@@ -204,9 +204,45 @@ def displayViolations(df):
         include_groups=False  # Fixes the DeprecationWarning
         ).reset_index(name='Violations')
 
+def createUtilityValues(df):
+        df['utilZoom'] = np.clip((df['Framerate'] - 850)/(1400-850), 0, 1)
+
+        df['utilNumberEnemies'] = (df['Number_Of_Enemies_Per_Second'] - df['Number_Of_Enemies_Min']) / (df['Number_Of_Enemies_Max'] - df['Number_Of_Enemies_Min'])
+
+        # df['utilEnemyVelocity'] = (df['Enemy_Velocity_Range_Min'] - df['Enemy_Velocity_Min']) / (2/4 * (df['Enemy_Velocity_Max'] - df['Enemy_Velocity_Min']))
 
 
+        return df;
 
+
+def createUtilityValuesGraph(df):
+        fig, ax = plt.subplots(figsize=(6, 6))  # Square figure
+        sns.lineplot(data=df, x="utilNumberEnemies", y="FPS_Satisfaction", hue="Machine", errorbar="sd", ax=ax)
+
+        # Customize the plot
+        ax.set_xlabel("Utility Value E.d")
+        ax.set_ylabel("Utility Value G.d")
+        ax.set_title("Utility Values E.d and G.d")
+
+        # Ensure the aspect ratio is 1:1
+        ax.set_aspect(1)
+
+        # Show the plot
+        plt.show()
+
+        fig, ax = plt.subplots(figsize=(6, 6))  # Square figure
+        sns.lineplot(data=df, x="utilNumberEnemies", y="FPS_Satisfaction", errorbar="sd", ax=ax)
+
+        # Customize the plot
+        ax.set_xlabel("Utility Value E.d")
+        ax.set_ylabel("Utility Value G.d")
+        ax.set_title("Utility Values E.d and G.d")
+
+        # Ensure the aspect ratio is 1:1
+        ax.set_aspect(1)
+
+        # Show the plot
+        plt.show()
 
 df = initDF()
 
@@ -221,4 +257,7 @@ pd.set_option('display.max_columns', None)
 
 # displayViolations(df)
 
-print(df.columns)
+createUtilityValues(df)
+createUtilityValuesGraph(df)
+
+# print(df.head())
