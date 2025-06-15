@@ -6,8 +6,7 @@ The purpose of this document is to provide a detailed analysis into the function
 This section provides a set of functional and nonfunctional requirements that the software must follow
 
 ## Functional Requirements
-### <Enemy Logic>
-| ID | Requirement |
+| ID | Enemy Logic |
 | :-------------: | :----------: |
 | FR1 | The game shall spawn enemies at random intervals in random positions offscreen |
 | FR2 | The game shall adjust the enemy size, number of enemies, and enemy sight to change the difficulty based on the player’s performance |
@@ -15,8 +14,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | FR4 | The game shall adjust the enemy size, number of enemies, and enemy sight to adjust the framerate of the game |
 | FR5 | Enemies shall follow the player when the player is within the enemies sight |
 
-### <Framerate SAS>
-| ID | Requirement |
+| ID | Framerate SAS |
 | :-------------: | :----------: |
 | FR6 | The zoom level must dynamically adjust based on player performance and happiness |
 | FR7 | The zoom level must reset when a new game begins <REFER TO A FUTURE REQUIREMENT> |
@@ -24,8 +22,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | FR9 | Happiness must influence overall game behavior (e.g., difficulty) |
 | FR10 | Happiness must increase with higher framerates and decrease with lower ones |
 
-### <Score>
-| ID | Requirement |
+| ID | Score |
 | :-------------: | :----------: |
 | FR11 | The score must increase when a player eats a smaller fish |
 | FR12 | The score must increase proportionally to the enemy fish's size |
@@ -33,8 +30,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | FR14 | The score must never decrease while the game is active |
 | FR15 | The score must reset when a new game begins |
 
-### <Player Interactions>
-| ID | Requirement |
+| ID | Player Interactions |
 | :-------------: | :----------: |
 | FR16 | The player fish must move when the player inputs a movement key |
 | FR17 | The player must not be able to go off screen |
@@ -44,9 +40,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | FR21 | The game must end when the player touches a larger fish |
 | FR22 | The player must grow when the player touches a smaller fish |
 
-
-### <Performance and Stability>
-| ID | Requirement |
+| ID | Performance and Stability |
 | :-------------: | :----------: |
 | FR23 | The game must maintain a minimum framerate of 30 FPS |
 | FR24 | The game must handle unexpected input |
@@ -55,8 +49,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | FR27 | The system must be capable of handling skipped frames |
 
 ## Non-Functional Requirements
-### <Enemy Logic>
-| ID | Requirement |
+| ID | Enemy Logic |
 | :-------------: | :----------: |
 | NFR1 | Enemy sprites must maintain visual clarity at all zoom levels |
 | NFR2 | Enemies must maintain a constant velocity across all framerates |
@@ -64,8 +57,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | NFR4 | Enemy difficulty must feel natural |
 | NFR5 | Enemy difficulty changes must not cause delays |
 
-### <Framerate SAS>
-| ID | Requirement |
+| ID | Framerate SAS |
 | :-------------: | :----------: |
 | NFR6 | Zoom calculations must be completed within 2ms per frame |
 | NFR7 | The happiness calculations must be completed within 1ms per frame |
@@ -73,8 +65,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | NFR9 | The zoom system must not interfere with the other SAS systems |
 | NFR10 | Happiness levels must have a maximum gradual change of .05 happiness per second |
 
-### <Score>
-| ID | Requirement |
+| ID | Score |
 | :-------------: | :----------: |
 | NFR11 | Score updates must be processed within 1ms per frame |
 | NFR12 | The scoring UI must be legible across all zoom levels and systems |
@@ -82,8 +73,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | NFR14 | The scoring UI must support localization |
 | NFR15 | The end user score UI must appear within 1ms of the player dying |
 
-### <Player Interactions>
-| ID | Requirement |
+| ID | Player Interactions |
 | :-------------: | :----------: |
 | NFR16 | User input must be processed within 20ms, even at low frame rates |
 | NFR17 | Collision detection must occur within 1ms of occurance |
@@ -91,8 +81,7 @@ This section provides a set of functional and nonfunctional requirements that th
 | NFR19 | User input must be supported and processed for multiple different Operating Systems |
 | NFR20 | The system must handle at least 4 simultaneous inputs without delay or missed actions |
 
-### <Performance and Stability>
-| ID | Requirement |
+| ID | Performance and Stability |
 | :-------------: | :----------: |
 | NFR21 | Framerate dips must recover within a second |
 | NFR22 | The game must scale to different screen sizes and aspect ratios |
